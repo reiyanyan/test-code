@@ -16,6 +16,10 @@ export default defineConfig({
         replacement: path.resolve(__dirname, "./src/components"),
       },
       {
+        find: "@/core",
+        replacement: path.resolve(__dirname, "./src/core"),
+      },
+      {
         find: "@/interface",
         replacement: path.resolve(__dirname, "./src/interface"),
       },

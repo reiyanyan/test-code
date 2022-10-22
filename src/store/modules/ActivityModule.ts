@@ -1,5 +1,6 @@
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
-import { Actions, Mutations } from "../enums/StoreEnums";
+import { Actions, Mutations } from "@/store/enums/StoreEnums";
+import ApiService from "@/core/services/ApiService";
 
 export type ItemActivity = {
   id: number;
@@ -7,6 +8,14 @@ export type ItemActivity = {
   created_at: Date;
 };
 
+const email = "rei@mail.com";
+
+type A = {
+  data: Array<ItemActivity>;
+  limit: number;
+  skip: number;
+  total: number;
+};
 @Module
 export default class ActivityModule extends VuexModule {
   dataActivityGroups: Array<ItemActivity> = new Array();
@@ -16,12 +25,44 @@ export default class ActivityModule extends VuexModule {
   }
 
   @Mutation
-  [Mutations.SET_DATA_ACTIVITY_GROUPS](itemActivity: ItemActivity) {
-    this.dataActivityGroups.push(itemActivity);
+  [Mutations.SET_DATA_ACTIVITY_GROUPS](dataActivityGroups: Array<ItemActivity>) {
+    this.dataActivityGroups = dataActivityGroups;
   }
 
   @Action
   [Actions.FETCH_ACTIVITY_GROUPS]() {
-    // return new Promise<void>((resolve, reject) => {});
+    return new Promise<void>((resolve, reject) => {
+      ApiService.get<{ data: Array<ItemActivity> }>("/activity-groups", {
+        params: {
+          email,
+        },
+      })
+        .then((res) => {
+          this.context.commit(Mutations.SET_DATA_ACTIVITY_GROUPS, res.data.data);
+          resolve();
+        })
+        .then((err) => reject(err));
+    });
+  }
+
+  @Action
+  [Actions.DELETE_ACTIVITY_GROUP](id: number) {
+    return new Promise<void>((resolve, reject) => {
+      ApiService.delete(`/activity-groups/${id}`)
+        .then(() => resolve())
+        .catch((err) => reject(err));
+    });
+  }
+
+  @Action
+  [Actions.ADD_ACTIVITY_GROUP]() {
+    return new Promise<void>((resolve, reject) => {
+      ApiService.post("/activity-groups", {
+        email,
+        title: "New Activity",
+      })
+        .then(() => resolve())
+        .catch((err) => reject(err));
+    });
   }
 }

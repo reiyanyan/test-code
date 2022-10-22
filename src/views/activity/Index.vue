@@ -2,12 +2,15 @@
   <div class="container flex flex-col gap-4">
     <div class="flex flex-row justify-between w-full items-center my-3">
       <p class="text-xl font-bold">Activity</p>
-      <Button @click="handlerClick" data-cy="activity-add-button">
+      <Button @click="handlerAddActivity" data-cy="activity-add-button">
         <Icon>add</Icon>
         Tambah
       </Button>
     </div>
-    <div v-if="listData.length == 0" class="flex">
+    <div v-if="isLoading">
+      <p>Loading ...</p>
+    </div>
+    <div v-if="!isLoading && listData.length == 0" class="flex">
       <div class="flex flex-row justify-center w-full">
         <img
           src="@/assets/img/activity-empty-state.svg"
@@ -19,51 +22,74 @@
       </div>
     </div>
     <div v-else class="grid grid-cols-4 gap-7">
-      <Card />
+      <Card v-for="item in listData" :key="item.id" :item="item" @detail="handlerDetail(item.id)" />
     </div>
 
     <!-- Modal -->
-    <ModalDelete :showing="Boolean(isModalDelete)" @close="handlerClose" />
+    <!-- <ModalDelete :showing="Boolean(isModalDelete)" @close="handlerClose" /> -->
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { computed, defineComponent, onMounted, ref } from "vue";
 import Button from "@/components/button/Button.vue";
 import Icon from "@/components/icon/Icon.vue";
 import Card from "./shared/Card.vue";
-import ModalDelete from "./shared/ModalDelete.vue";
+import { useStore } from "vuex";
+import { Actions } from "@/store/enums/StoreEnums";
+import { ItemActivity } from "@/store/modules/ActivityModule";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
   components: {
     Button,
     Icon,
     Card,
-    ModalDelete,
   },
   setup() {
-    const isModalDelete = ref<Boolean>(true);
+    const store = useStore();
+    const router = useRouter();
 
-    const listData = ref<Array<unknown>>([
-      {
-        title: "hai",
-      },
-    ]);
+    const isModalDelete = ref<Boolean>(false);
+    const isLoading = ref<Boolean>(true);
+    // const listData = ref<Array<ItemActivity>>([]);
+    const listData = computed((): Array<ItemActivity> => store.getters.getDataActivityGroups);
 
-    const handlerClick = () => {
-      isModalDelete.value = true;
+    const handlerAddActivity = async () => {
+      await store.dispatch(Actions.ADD_ACTIVITY_GROUP);
+      getData();
     };
 
     const handlerClose = () => {
       isModalDelete.value = false;
-      console.log("hai");
     };
 
+    const handlerDetail = (id: number) => {
+      router.push({
+        name: "ActivityDetail",
+        params: {
+          id,
+        },
+      });
+    };
+
+    const getData = async () =>
+      await store
+        .dispatch(Actions.FETCH_ACTIVITY_GROUPS)
+        .then(() => (isLoading.value = false))
+        .catch((err) => console.log(err));
+
+    onMounted(() => {
+      getData();
+    });
+
     return {
-      handlerClick,
+      handlerAddActivity,
       listData,
       isModalDelete,
       handlerClose,
+      isLoading,
+      handlerDetail,
     };
   },
 });

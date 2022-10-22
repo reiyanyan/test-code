@@ -1,5 +1,5 @@
 <template>
-  <Modal :outside-click="true" class="w-[490px]" v-bind="$attrs">
+  <Modal :outside-click="false" class="w-[490px]" @close="$emit('close')">
     <div class="flex flex-col items-center text-center gap-8">
       <img
         src="@/assets/icons/outlined/modal-delete-icon.svg"
@@ -10,11 +10,11 @@
       <p>
         Apakah anda yakin menghapus activity
         <br />
-        <b>"Meeting dengan client"?</b>
+        <b>{{ `"${title}"?` }}</b>
       </p>
       <div class="flex flex-row justify-between w-full gap-5">
-        <Button class="w-full" variant="light">Close</Button>
-        <Button class="w-full" variant="danger">Delete</Button>
+        <Button class="w-full" variant="light" @click="$emit('close')">Close</Button>
+        <Button class="w-full" variant="danger" @click="$emit('delete')">Delete</Button>
       </div>
     </div>
   </Modal>
@@ -30,5 +30,12 @@ export default defineComponent({
     Modal,
     Button,
   },
+  props: {
+    title: {
+      type: String,
+      required: true,
+    },
+  },
+  emits: ["close", "delete"],
 });
 </script>
