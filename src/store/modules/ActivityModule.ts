@@ -1,6 +1,8 @@
-import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
-import { Actions, Mutations } from "@/store/enums/StoreEnums";
+import APP_INFO from "@/core/constants";
 import ApiService from "@/core/services/ApiService";
+import { Actions, Mutations } from "@/store/enums/StoreEnums";
+import { AxiosResponse } from "axios";
+import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 
 export type ItemActivity = {
   id: number;
@@ -8,14 +10,7 @@ export type ItemActivity = {
   created_at: Date;
 };
 
-const email = "rei@mail.com";
-
-type A = {
-  data: Array<ItemActivity>;
-  limit: number;
-  skip: number;
-  total: number;
-};
+const email = APP_INFO.API_EMAIL;
 @Module
 export default class ActivityModule extends VuexModule {
   dataActivityGroups: Array<ItemActivity> = new Array();
@@ -60,6 +55,28 @@ export default class ActivityModule extends VuexModule {
       ApiService.post("/activity-groups", {
         email,
         title: "New Activity",
+      })
+        .then(() => resolve())
+        .catch((err) => reject(err));
+    });
+  }
+
+  @Action
+  [Actions.INFO_ACTIVITY_GROUP](id: number) {
+    return new Promise<ItemActivity>((resolve, reject) => {
+      ApiService.get<ItemActivity>(`/activity-groups/${id}`)
+        .then((res) => {
+          resolve(res.data);
+        })
+        .catch((err) => reject(err));
+    });
+  }
+
+  @Action
+  [Actions.UPDATE_ACTIVITY_GROUP]({ id, title }: ItemActivity) {
+    return new Promise<void>((resolve, reject) => {
+      ApiService.patch(`/activity-groups/${id}`, {
+        title,
       })
         .then(() => resolve())
         .catch((err) => reject(err));

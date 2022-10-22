@@ -1,6 +1,6 @@
 <template>
   <div class="container flex flex-col gap-4">
-    <div class="flex flex-row justify-between w-full items-center my-3">
+    <div class="flex flex-row justify-between w-full items-center my-5">
       <p class="text-xl font-bold">Activity</p>
       <Button @click="handlerAddActivity" data-cy="activity-add-button">
         <Icon>add</Icon>
@@ -10,7 +10,7 @@
     <div v-if="isLoading">
       <p>Loading ...</p>
     </div>
-    <div v-if="!isLoading && listData.length == 0" class="flex">
+    <div v-else-if="!isLoading && listData.length == 0" class="flex">
       <div class="flex flex-row justify-center w-full">
         <img
           src="@/assets/img/activity-empty-state.svg"
@@ -22,11 +22,14 @@
       </div>
     </div>
     <div v-else class="grid grid-cols-4 gap-7">
-      <Card v-for="item in listData" :key="item.id" :item="item" @detail="handlerDetail(item.id)" />
+      <Card
+        v-for="item in listData"
+        :key="item.id"
+        :item="item"
+        @detail="handlerDetail(item.id)"
+        @fetch="getData"
+      />
     </div>
-
-    <!-- Modal -->
-    <!-- <ModalDelete :showing="Boolean(isModalDelete)" @close="handlerClose" /> -->
   </div>
 </template>
 
@@ -51,8 +54,7 @@ export default defineComponent({
     const router = useRouter();
 
     const isModalDelete = ref<Boolean>(false);
-    const isLoading = ref<Boolean>(true);
-    // const listData = ref<Array<ItemActivity>>([]);
+    const isLoading = ref<Boolean>(false);
     const listData = computed((): Array<ItemActivity> => store.getters.getDataActivityGroups);
 
     const handlerAddActivity = async () => {
@@ -73,11 +75,14 @@ export default defineComponent({
       });
     };
 
-    const getData = async () =>
+    const getData = async () => {
+      isLoading.value = true;
       await store
         .dispatch(Actions.FETCH_ACTIVITY_GROUPS)
+        // .then(() => setTimeout(() => (isLoading.value = false), 1000)) // mock time
         .then(() => (isLoading.value = false))
         .catch((err) => console.log(err));
+    };
 
     onMounted(() => {
       getData();
@@ -90,6 +95,7 @@ export default defineComponent({
       handlerClose,
       isLoading,
       handlerDetail,
+      getData,
     };
   },
 });

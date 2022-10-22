@@ -4,7 +4,7 @@
     v-bind="$attrs"
     @click.self="$emit('detail')"
   >
-    <p>{{ item.title }}</p>
+    <p class="font-bold text-2xl" @click="$emit('detail')">{{ item.title }}</p>
     <div class="flex flex-row justify-between items-center text-inactive cursor-default">
       <p class="text-xs">{{ formatTime(item.created_at) }}</p>
       <Icon
@@ -49,8 +49,8 @@ export default defineComponent({
       required: true,
     },
   },
-  emits: ["detail"],
-  setup(props) {
+  emits: ["detail", "fetch"],
+  setup(props, context) {
     const store = useStore();
     const isModalDelete = ref<Boolean>(false);
     const isModalSuccessDelete = ref<Boolean>(false);
@@ -69,7 +69,7 @@ export default defineComponent({
 
     const handlerSuccessDeleteClose = async () => {
       isModalDelete.value = false;
-      await store.dispatch(Actions.FETCH_ACTIVITY_GROUPS);
+      context.emit("fetch");
     };
 
     return {
