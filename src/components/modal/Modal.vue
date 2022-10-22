@@ -9,7 +9,11 @@
         class="flex flex-col relative max-h-screen w-full max-w-2xl bg-white shadow-lg rounded-lg gap-5"
         v-bind="$attrs"
       >
-        <div class="flex flex-row justify-between px-6 py-4" :class="{ 'border-b': title }">
+        <div
+          id="modal__title__wrapper"
+          class="flex flex-row justify-between px-6 py-4"
+          :class="{ 'border-b': title }"
+        >
           <p>{{ title }}</p>
           <Icon
             v-if="outsideClick"
@@ -19,7 +23,7 @@
             close
           </Icon>
         </div>
-        <div class="max-h-screen w-full" :class="footer ? 'py-4 px-8' : 'pt-4 pb-8 px-8'">
+        <div class="max-h-screen w-full py-4 px-8">
           <slot />
         </div>
         <div v-if="footer" class="px-6 py-4 border-t">

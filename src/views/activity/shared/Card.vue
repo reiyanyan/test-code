@@ -5,7 +5,7 @@
     @click.self="$emit('detail')"
   >
     <p>{{ item.title }}</p>
-    <div class="flex flex-row justify-between items-center text-inactive">
+    <div class="flex flex-row justify-between items-center text-inactive cursor-default">
       <p class="text-xs">{{ formatTime(item.created_at) }}</p>
       <Icon
         class="cursor-pointer p-1"
@@ -18,9 +18,11 @@
     <ModalDelete
       :title="item.title"
       :showing="Boolean(isModalDelete)"
-      @close="handlerClose"
+      @close="handlerDeleteClose"
       @delete="handlerDelete"
     />
+
+    <ModalSuccessDelete :showing="isModalSuccessDelete" @close="handlerSuccessDeleteClose" />
   </div>
 </template>
 
@@ -32,12 +34,14 @@ import { formatTime } from "@/core/helpers/index";
 import ModalDelete from "./ModalDelete.vue";
 import { useStore } from "vuex";
 import { Actions } from "@/store/enums/StoreEnums";
+import ModalSuccessDelete from "./ModalSuccessDelete.vue";
 
 export default defineComponent({
   inheritAttrs: false,
   components: {
     Icon,
     ModalDelete,
+    ModalSuccessDelete,
   },
   props: {
     item: {
@@ -49,26 +53,39 @@ export default defineComponent({
   setup(props) {
     const store = useStore();
     const isModalDelete = ref<Boolean>(false);
+    const isModalSuccessDelete = ref<Boolean>(false);
 
-    const handlerClose = () => {
-      isModalDelete.value = false;
+    const handlerDelete = () => {
+      store
+        .dispatch(Actions.DELETE_ACTIVITY_GROUP, props.item.id)
+        .then(() => {
+          isModalDelete.value = false;
+          isModalSuccessDelete.value = true;
+        })
+        .catch((err) => console.log(err));
     };
 
-    const handlerDelete = async () => {
-      await store
-        .dispatch(Actions.DELETE_ACTIVITY_GROUP, props.item.id)
-        .then(() => (isModalDelete.value = false))
-        .catch((err) => console.log(err));
+    const handlerDeleteClose = () => (isModalDelete.value = false);
 
+    const handlerSuccessDeleteClose = async () => {
+      isModalDelete.value = false;
       await store.dispatch(Actions.FETCH_ACTIVITY_GROUPS);
     };
 
     return {
       formatTime,
-      handlerClose,
       isModalDelete,
       handlerDelete,
+      isModalSuccessDelete,
+      handlerDeleteClose,
+      handlerSuccessDeleteClose,
     };
   },
 });
 </script>
+
+<style lang="scss" scoped>
+:deep(#modal__title__wrapper) {
+  display: none;
+}
+</style>
