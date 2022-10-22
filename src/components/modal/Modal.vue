@@ -6,18 +6,24 @@
       @click.self="outsideClick ? $emit('close') : () => {}"
     >
       <div
-        class="flex relative max-h-screen w-full max-w-2xl bg-white shadow-lg rounded-lg p-8"
+        class="flex flex-col relative max-h-screen w-full max-w-2xl bg-white shadow-lg rounded-lg gap-5"
         v-bind="$attrs"
       >
-        <Icon
-          v-if="outsideClick"
-          class="absolute top-0 right-0 text-xl text-gray-500 my-2 mx-4 cursor-pointer"
-          @click="$emit('close')"
-        >
-          close
-        </Icon>
-        <div class="overflow-auto max-h-screen w-full">
+        <div class="flex flex-row justify-between px-6 py-4" :class="{ 'border-b': title }">
+          <p>{{ title }}</p>
+          <Icon
+            v-if="outsideClick"
+            class="text-xl text-gray-500 cursor-pointer"
+            @click="$emit('close')"
+          >
+            close
+          </Icon>
+        </div>
+        <div class="max-h-screen w-full" :class="footer ? 'py-4 px-8' : 'pt-4 pb-8 px-8'">
           <slot />
+        </div>
+        <div v-if="footer" class="px-6 py-4 border-t">
+          <slot name="footer" />
         </div>
       </div>
     </div>
@@ -34,6 +40,11 @@ export default defineComponent({
     Icon,
   },
   props: {
+    title: {
+      type: String,
+      required: false,
+      default: "",
+    },
     showing: {
       type: Boolean,
       default: false,
@@ -41,6 +52,10 @@ export default defineComponent({
     outsideClick: {
       type: Boolean,
       default: true,
+    },
+    footer: {
+      type: Boolean,
+      default: false,
     },
   },
   emits: ["close"],

@@ -12,13 +12,18 @@
   </div>
 </template>
 
-<script setup lang="ts">
-type ButtonVariantProps = "primary" | "light" | "danger";
-interface Props {
-  variant: ButtonVariantProps;
-}
+<script lang="ts">
+import { defineComponent } from "vue";
+import type { PropType } from "vue";
 
-withDefaults(defineProps<Props>(), {
-  variant: "primary",
+type ButtonVariantProps = "primary" | "light" | "danger";
+
+export default defineComponent({
+  props: {
+    variant: {
+      type: String as PropType<ButtonVariantProps>,
+      default: "primary",
+    },
+  },
 });
 </script>
