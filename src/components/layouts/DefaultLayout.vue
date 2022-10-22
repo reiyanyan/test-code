@@ -5,6 +5,8 @@
         <p class="font-semibold text-white text-xl">To Do List App</p>
       </div>
     </header>
-    <slot />
+    <div class="bg-background h-screen w-screen">
+      <slot />
+    </div>
   </div>
 </template>

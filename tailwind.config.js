@@ -8,6 +8,10 @@ module.exports = {
       },
       colors: {
         primary: "#16ABF8",
+        background: "#E5E5E5",
+        inactive: "#888888",
+        danger: "#ED4C5C",
+        light: "#F4F4F4",
       },
     },
   },

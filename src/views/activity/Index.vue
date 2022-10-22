@@ -2,7 +2,7 @@
   <div class="container flex flex-col gap-4">
     <div class="flex flex-row justify-between w-full items-center my-3">
       <p class="text-xl font-bold">Activity</p>
-      <Button data-cy="activity-add-button" @click="handlerClick">
+      <Button @click="handlerClick" data-cy="activity-add-button">
         <Icon>add</Icon>
         Tambah
       </Button>
@@ -18,32 +18,52 @@
         />
       </div>
     </div>
-    <div v-else>
-      <p>ada isi</p>
+    <div v-else class="grid grid-cols-4 gap-7">
+      <Card />
     </div>
+
+    <!-- Modal -->
+    <ModalDelete :showing="Boolean(isModalDelete)" @close="handlerClose" />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 import Button from "@/components/button/Button.vue";
-import Icon from "@/components/icon/Index.vue";
+import Icon from "@/components/icon/Icon.vue";
+import Card from "./shared/Card.vue";
+import ModalDelete from "./shared/ModalDelete.vue";
 
 export default defineComponent({
   components: {
     Button,
     Icon,
+    Card,
+    ModalDelete,
   },
   setup() {
-    const listData = ref<Array<unknown>>([]);
+    const isModalDelete = ref<Boolean>(true);
+
+    const listData = ref<Array<unknown>>([
+      {
+        title: "hai",
+      },
+    ]);
 
     const handlerClick = () => {
-      console.log("hai rei");
+      isModalDelete.value = true;
+    };
+
+    const handlerClose = () => {
+      isModalDelete.value = false;
+      console.log("hai");
     };
 
     return {
       handlerClick,
       listData,
+      isModalDelete,
+      handlerClose,
     };
   },
 });

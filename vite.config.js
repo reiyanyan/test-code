@@ -6,9 +6,36 @@ import path from "path";
 export default defineConfig({
   plugins: [vue()],
   resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "./src"),
-    },
+    alias: [
+      {
+        find: "@/assets",
+        replacement: path.resolve(__dirname, "./src/assets"),
+      },
+      {
+        find: "@/components",
+        replacement: path.resolve(__dirname, "./src/components"),
+      },
+      {
+        find: "@/interface",
+        replacement: path.resolve(__dirname, "./src/interface"),
+      },
+      {
+        find: "@/store",
+        replacement: path.resolve(__dirname, "./src/store"),
+      },
+      {
+        find: "@/views",
+        replacement: path.resolve(__dirname, "./src/views"),
+      },
+      {
+        find: "@/router",
+        replacement: path.resolve(__dirname, "./src/router"),
+      },
+      {
+        find: "@/",
+        replacement: path.resolve(__dirname, "./src"),
+      },
+    ],
   },
   server: {
     port: 8000,

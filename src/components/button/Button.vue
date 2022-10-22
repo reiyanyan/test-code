@@ -1,24 +1,24 @@
 <template>
   <div
-    class="flex flex-row gap-2 w-max px-4 py-2 rounded-full bg-primary text-white"
-    @click="$emit('onClick')"
+    class="flex flex-row justify-center gap-2 w-max px-4 py-2 rounded-full text-white cursor-pointer"
+    :class="{
+      'bg-primary': variant === 'primary',
+      'bg-danger': variant === 'danger',
+      'bg-light text-black': variant === 'light',
+    }"
     v-bind="$attrs"
   >
     <slot />
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<script setup lang="ts">
+type ButtonVariantProps = "primary" | "light" | "danger";
+interface Props {
+  variant: ButtonVariantProps;
+}
 
-export default defineComponent({
-  inheritAttrs: false,
-  props: {
-    text: {
-      type: String,
-      default: "",
-    },
-  },
-  emits: ["onClick"],
+withDefaults(defineProps<Props>(), {
+  variant: "primary",
 });
 </script>
