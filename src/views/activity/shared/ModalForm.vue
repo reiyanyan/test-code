@@ -74,8 +74,16 @@ export default defineComponent({
       };
       store
         .dispatch(state.value == "add" ? Actions.ADD_TODO_ITEM : Actions.UPDATE_TODO_ITEM, payload)
-        .then(() => emit("fetch"))
+        .then(() => {
+          emit("fetch");
+          resetForm();
+        })
         .catch((err) => console.log(err));
+    };
+
+    const resetForm = () => {
+      itemName.value = "";
+      selectedLevel.value = "";
     };
 
     onMounted(() => {
