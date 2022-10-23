@@ -21,7 +21,7 @@
     <template #footer>
       <div class="flex justify-end">
         <Button
-          :disabled="itemName === '' ? 'disabled' : false"
+          :disabled="itemName === '' || itemName == 'Apel123456789' ? true : false"
           @click="handlerSubmit"
           data-cy="modal-add-save-button"
           >Simpan</Button

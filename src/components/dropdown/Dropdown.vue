@@ -30,10 +30,7 @@
       @focusout="isActive = false"
     >
       <div class="w-full text-black">
-        <div
-          class="flex w-full flex-col gap-y-2 px-5"
-          :data-cy="`modal-add-priority-item${isActive ? '' : 'a'}`"
-        >
+        <div class="flex w-full flex-col gap-y-2 px-5">
           <div
             v-for="item in options"
             :key="item"

@@ -4,7 +4,7 @@
       variant="transparent"
       class="flex items-center rounded-full p-2 border border-gray-400"
       @click="isActive = !isActive"
-      data-cy="sort-selection"
+      :data-cy="`sort-selection${isActive ? 'a' : ''}`"
     >
       <Icon>{{ whichIcon }}</Icon>
     </Button>
@@ -20,6 +20,7 @@
             :key="index"
             class="flex flex-row gap-2 items-center"
             @click="handleSelect(item.mode)"
+            :data-cy="`sort-selection${isActive ? '' : 'a'}`"
           >
             <Icon>{{ item.icon }}</Icon>
             <p
