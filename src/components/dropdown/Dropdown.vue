@@ -38,12 +38,12 @@
             v-for="item in options"
             :key="item"
             class="flex flex-row gap-2 items-center"
+            :data-cy="`modal-add-priority-${item === 'normal' ? 'medium' : item}`"
             @click="handleSelect(item)"
           >
             <div class="h-3.5 w-3.5 rounded-full" :class="BindingClassPriority(item)"></div>
             <p
               class="capitalize transition-color w-full cursor-pointer rounded-md px-5 py-2 duration-200 hover:bg-slate-400 hover:text-slate-600"
-              :data-cy="`modal-add-priority-${item === 'normal' ? 'medium' : item}`"
             >
               {{ String(item).replaceAll("-", " ") }}
             </p>
