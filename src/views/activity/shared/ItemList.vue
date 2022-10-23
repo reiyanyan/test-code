@@ -45,11 +45,13 @@
       @close="handlerCloseForm"
       @fetch="handlerFetchModalForm"
     />
+
+    <ModalSuccessDelete :showing="isModalSuccessDelete" @close="handlerSuccessDeleteClose" />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from "vue";
+import { defineComponent, onMounted, ref, watch } from "vue";
 import Icon from "@/components/icon/Icon.vue";
 import { ItemToDo } from "@/store/modules/ToDoModule";
 import { BindingClassPriority } from "@/core/helpers/index";
@@ -57,12 +59,14 @@ import ModalDelete from "./ModalDelete.vue";
 import { useStore } from "vuex";
 import { Actions } from "@/store/enums/StoreEnums";
 import ModalForm from "./ModalForm.vue";
+import ModalSuccessDelete from "./ModalSuccessDelete.vue";
 
 export default defineComponent({
   components: {
     Icon,
     ModalDelete,
     ModalForm,
+    ModalSuccessDelete,
   },
   props: {
     item: {
@@ -74,20 +78,25 @@ export default defineComponent({
   setup(props, { emit }) {
     const store = useStore();
     const isModalDelete = ref<boolean>(false);
+    const isModalSuccessDelete = ref<boolean>(false);
     const isModalForm = ref<boolean>(false);
 
     const handlerDelete = () => {
       store
         .dispatch(Actions.DELETE_TODO_ITEM, props.item.id)
         .then(() => {
+          isModalSuccessDelete.value = true;
           isModalDelete.value = false;
-          emit("fetch");
         })
         .catch((err) => console.log(err));
     };
 
     const handlerDeleteClose = () => (isModalDelete.value = false);
     const handlerCloseForm = () => (isModalForm.value = false);
+    const handlerSuccessDeleteClose = () => {
+      isModalSuccessDelete.value = false;
+      emit("fetch");
+    };
 
     const handlerFetchModalForm = () => {
       emit("fetch");
@@ -102,6 +111,13 @@ export default defineComponent({
       emit("fetch");
     };
 
+    watch(
+      () => isModalSuccessDelete.value,
+      (val) => {
+        console.log("val", val);
+      }
+    );
+
     return {
       BindingClassPriority,
       handlerDelete,
@@ -111,6 +127,8 @@ export default defineComponent({
       handlerCloseForm,
       handlerFetchModalForm,
       handleCheck,
+      isModalSuccessDelete,
+      handlerSuccessDeleteClose,
     };
   },
 });
