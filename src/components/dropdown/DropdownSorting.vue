@@ -4,6 +4,7 @@
       variant="transparent"
       class="flex items-center rounded-full p-2 border border-gray-400"
       @click="isActive = !isActive"
+      data-cy="sort-selection"
     >
       <Icon>{{ whichIcon }}</Icon>
     </Button>

@@ -7,6 +7,7 @@
         'border-none ring-2 ring-blue-600 text-slate-900 bg-gray-200': isActive,
         'text-slate-900 border border-gray-500': !isActive,
       }"
+      data-cy="modal-add-priority-item"
       @click="isActive = !isActive"
     >
       <div class="flex flex-row gap-2 items-center">
