@@ -30,7 +30,7 @@
         :item="item"
         @detail="handlerDetail(item.id)"
         @fetch="getData"
-        :data-cy="`activity-item-${index}`"
+        data-cy="activity-item"
       />
     </div>
   </div>
