@@ -4,9 +4,11 @@
     v-bind="$attrs"
     @click.self="$emit('detail')"
   >
-    <p class="font-bold text-2xl" @click="$emit('detail')">{{ item.title }}</p>
+    <p class="font-bold text-2xl" @click="$emit('detail')" data-cy="activity-item-title">
+      {{ item.title }}
+    </p>
     <div class="flex flex-row justify-between items-center text-inactive cursor-default">
-      <p class="text-xs">{{ formatTime(item.created_at) }}</p>
+      <p class="text-xs" data-cy="activity-item-date">{{ formatTime(item.created_at) }}</p>
       <Icon
         class="cursor-pointer p-1"
         data-cy="activity-delete-item-button"

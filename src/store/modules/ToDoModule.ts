@@ -4,6 +4,8 @@ import ApiService from "@/core/services/ApiService";
 
 export type PriorityItem = "very-high" | "high" | "normal" | "low" | "very-low";
 
+export type SortingProps = "newer" | "older" | "nameAsc" | "nameDesc" | "default";
+
 export type ItemToDo = {
   id?: number;
   title: string;

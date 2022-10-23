@@ -1,7 +1,7 @@
 <template>
   <div class="container flex flex-col gap-4">
     <div class="flex flex-row justify-between w-full items-center my-5">
-      <p class="text-xl font-bold">Activity</p>
+      <p class="text-xl font-bold" data-cy="activity-title">Activity</p>
       <Button @click="handlerAddActivity" data-cy="activity-add-button">
         <Icon>add</Icon>
         Tambah
@@ -11,23 +11,26 @@
       <p>Loading ...</p>
     </div>
     <div v-else-if="!isLoading && listData.length == 0" class="flex">
-      <div class="flex flex-row justify-center w-full">
+      <div class="flex flex-row justify-center w-full" data-cy="activity-empty-state">
         <img
+          class="cursor-pointer"
           src="@/assets/img/activity-empty-state.svg"
           alt=""
           width="767"
           height="490"
           data-cy="activity-empty-state"
+          @click="handlerAddActivity"
         />
       </div>
     </div>
     <div v-else class="grid grid-cols-4 gap-7">
       <Card
-        v-for="item in listData"
-        :key="item.id"
+        v-for="(item, index) in listData"
+        :key="index"
         :item="item"
         @detail="handlerDetail(item.id)"
         @fetch="getData"
+        :data-cy="`activity-item-${index}`"
       />
     </div>
   </div>

@@ -5,12 +5,27 @@
         class="form-check-input appearance-none h-4 w-4 border border-inactive rounded-sm bg-white focus:ring-primary focus:bg-primary focus:border-primary focus:checked:bg-primary checked:bg-primary checked:border-primary focus:outline-none transition duration-200 cursor-pointer"
         type="checkbox"
         value=""
+        data-cy="todo-item-checkbox"
       />
-      <div class="h-3 w-3 rounded-full" :class="BindingClassPriority(item.priority)"></div>
-      <label>{{ item.title }}</label>
-      <Icon class="cursor-pointer p-1 text-inactive text-sm" @click="isModalForm = true">edit</Icon>
+      <div
+        class="h-3 w-3 rounded-full"
+        :class="BindingClassPriority(item.priority)"
+        data-cy="todo-item-priority-indicator"
+      ></div>
+      <label data-cy="todo-item-title">{{ item.title }}</label>
+      <Icon
+        class="cursor-pointer p-1 text-inactive text-sm"
+        @click="isModalForm = true"
+        data-cy="todo-item-edit-button"
+        >edit</Icon
+      >
     </div>
-    <Icon class="cursor-pointer p-1 text-inactive" @click="isModalDelete = true">delete</Icon>
+    <Icon
+      class="cursor-pointer p-1 text-inactive"
+      @click="isModalDelete = true"
+      data-cy="todo-item-delete-button"
+      >delete</Icon
+    >
 
     <ModalDelete
       :title="item.title"

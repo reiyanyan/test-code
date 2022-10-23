@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-row gap-4 items-center" ref="wrapper">
-    <p v-if="!isEditable" class="text-3xl font-bold">{{ modelValue }}</p>
+    <p v-if="!isEditable" class="text-3xl font-bold" data-cy="todo-title">{{ modelValue }}</p>
     <Input
       v-else
       :value="modelValue"
@@ -8,7 +8,12 @@
       class="border-0 bg-transparent !p-0 font-bold text-3xl"
       :flat="true"
     />
-    <Icon class="text-gray-400 cursor-pointer" @click="toggleEditable">edit</Icon>
+    <Icon
+      class="text-gray-400 cursor-pointer"
+      @click="toggleEditable"
+      data-cy="todo-title-edit-button"
+      >edit</Icon
+    >
   </div>
 </template>
 

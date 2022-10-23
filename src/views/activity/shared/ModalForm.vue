@@ -4,6 +4,7 @@
     :outside-click="true"
     :footer="true"
     class="w-[830px]"
+    data-cy="modal-add"
     v-bind="$attrs"
   >
     <div class="flex flex-col gap-2">
@@ -14,12 +15,14 @@
         type="text"
         placeholder="Tambahkan nama list item"
       />
-      <Dropdown v-model="selectedLevel" title="Priority" />
+      <Dropdown v-model="selectedLevel" title="Priority" data-cy="modal-add-priority-dropdown" />
     </div>
 
     <template #footer>
       <div class="flex justify-end">
-        <Button :disabled="itemName === ''" @click="handlerSubmit">Simpan</Button>
+        <Button :disabled="itemName === ''" @click="handlerSubmit" data-cy="modal-add-svae-button"
+          >Simpan</Button
+        >
       </div>
     </template>
   </Modal>

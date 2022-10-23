@@ -2,21 +2,44 @@
   <div class="container flex flex-col gap-4">
     <div class="flex flex-row justify-between w-full items-center my-5">
       <div class="flex flex-row gap-2 items-center">
-        <Icon class="cursor-pointer" @click="$router.back()">arrow_back_ios_new</Icon>
+        <Icon class="cursor-pointer" @click="$router.back()" data-cy="todo-back-button"
+          >arrow_back_ios_new</Icon
+        >
         <EditableTitle v-model="titleActivity" @update="handlerUpdateTitle" />
       </div>
       <div class="flex flex-row gap-2 items-center">
-        <Button variant="transparent" class="px-2">
-          <Icon>filter_list</Icon>
-        </Button>
-        <Button @click="handleShowModalForm">
+        <DropdownSorting v-model="selectedSorting" data-cy="todo-sort-button"></DropdownSorting>
+        <Button @click="handleShowModalForm" data-cy="todo-add-button">
           <Icon>add</Icon>
           Tambah
         </Button>
       </div>
     </div>
-    <div class="flex flex-col gap-5">
-      <ItemList v-for="item in todoItems" :key="item.id" :item="item" @fetch="getData" />
+    <div v-if="isLoading">
+      <p>Loading ...</p>
+    </div>
+    <div
+      v-else-if="!isLoading && todoItems.length == 0"
+      class="flex flex-row justify-center w-full"
+    >
+      <img
+        class="cursor-pointer"
+        src="@/assets/img/todo-empty-state.svg"
+        alt=""
+        width="767"
+        height="490"
+        data-cy="todo-empty-state"
+        @click="handleShowModalForm"
+      />
+    </div>
+    <div v-else class="flex flex-col gap-5">
+      <ItemList
+        v-for="(item, index) in todoItems"
+        :key="index"
+        :item="item"
+        @fetch="getData"
+        :data-cy="`todo-item-${index}`"
+      />
     </div>
 
     <ModalForm :showing="Boolean(isModalForm)" @close="handlerCloseForm" @fetch="getData" />
@@ -32,9 +55,10 @@ import EditableTitle from "../shared/EditableTitle.vue";
 import ItemList from "../shared/ItemList.vue";
 import { useStore } from "vuex";
 import { Actions } from "@/store/enums/StoreEnums";
-import { ItemToDo } from "@/store/modules/ToDoModule";
+import { ItemToDo, SortingProps } from "@/store/modules/ToDoModule";
 import { useRoute } from "vue-router";
 import { ItemActivity } from "@/store/modules/ActivityModule";
+import DropdownSorting from "@/components/dropdown/DropdownSorting.vue";
 
 export default defineComponent({
   components: {
@@ -43,23 +67,31 @@ export default defineComponent({
     Icon,
     EditableTitle,
     ItemList,
+    DropdownSorting,
   },
   setup() {
     const store = useStore();
     const route = useRoute();
     const titleActivity = ref<string>("");
     const isModalForm = ref<boolean>(false);
+    const selectedSorting = ref<SortingProps>("default");
+    const isLoading = ref<boolean>(false);
 
-    const todoItems = computed((): Array<ItemToDo> => store.getters.getTodoItems);
+    const todoItems = computed<Array<ItemToDo>>({
+      get: () => store.getters.getTodoItems,
+      set: (value) => value,
+    });
 
     const handlerCloseForm = () => {
       isModalForm.value = false;
     };
 
     const getInfoActivity = () => {
+      isLoading.value = true;
       store
         .dispatch(Actions.INFO_ACTIVITY_GROUP, route.params.id)
         .then(({ title }: ItemActivity) => {
+          isLoading.value = false;
           titleActivity.value = title;
           getData();
         })
@@ -67,8 +99,12 @@ export default defineComponent({
     };
 
     const getData = () => {
+      isLoading.value = true;
       isModalForm.value = false;
-      store.dispatch(Actions.FETCH_TODO_ITEMS, route.params.id).catch((err) => console.log(err));
+      store
+        .dispatch(Actions.FETCH_TODO_ITEMS, route.params.id)
+        .then(() => (isLoading.value = false))
+        .catch((err) => console.log(err));
     };
 
     const handlerUpdateTitle = async () => {
@@ -83,6 +119,35 @@ export default defineComponent({
       isModalForm.value = true;
     };
 
+    watch(
+      () => selectedSorting.value,
+      (val) => {
+        if (val === "newer") {
+          todoItems.value = store.getters.getTodoItems;
+        }
+        if (val === "older") {
+          todoItems.value = store.getters.getTodoItems.reverse();
+        }
+        if (val === "nameAsc") {
+          todoItems.value = store.getters.getTodoItems.sort((first: ItemToDo, second: ItemToDo) => {
+            if (first.title < second.title) return -1;
+            if (first.title > second.title) return 1;
+            return 0;
+          });
+        }
+        if (val === "nameDesc") {
+          todoItems.value = store.getters.getTodoItems.sort((first: ItemToDo, second: ItemToDo) => {
+            if (first.title < second.title) return 1;
+            if (first.title > second.title) return -1;
+            return 0;
+          });
+        }
+        if (val === "default") {
+          todoItems.value = store.getters.getTodoItems;
+        }
+      }
+    );
+
     onMounted(() => {
       getInfoActivity();
     });
@@ -95,6 +160,8 @@ export default defineComponent({
       titleActivity,
       isModalForm,
       handleShowModalForm,
+      selectedSorting,
+      isLoading,
     };
   },
 });
