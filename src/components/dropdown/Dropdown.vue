@@ -38,7 +38,7 @@
             v-for="item in options"
             :key="item"
             class="flex flex-row gap-2 items-center"
-            :data-cy="`modal-add-priority-${item === 'normal' ? 'medium' : item}`"
+            :data-cy="`modal-add-priority-item`"
             @click="handleSelect(item)"
           >
             <div class="h-3.5 w-3.5 rounded-full" :class="BindingClassPriority(item)"></div>
