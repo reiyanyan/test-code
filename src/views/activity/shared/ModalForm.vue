@@ -21,7 +21,7 @@
     <template #footer>
       <div class="flex justify-end">
         <Button
-          :disabled="itemName === '' || itemName == 'Apel123456789' ? true : false"
+          :disabled="itemName === '' && selectedLevel == '' ? true : false"
           @click="handlerSubmit"
           data-cy="modal-add-save-button"
           >Simpan</Button
@@ -61,7 +61,7 @@ export default defineComponent({
   setup(props, { emit }) {
     const store = useStore();
     const route = useRoute();
-    const selectedLevel = ref<PriorityItem>("very-high");
+    const selectedLevel = ref<PriorityItem>("");
     const itemName = ref<string>("");
     const state = ref<StateProps>("add");
 

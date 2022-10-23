@@ -2,7 +2,7 @@ import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import { Actions, Mutations } from "../enums/StoreEnums";
 import ApiService from "@/core/services/ApiService";
 
-export type PriorityItem = "very-high" | "high" | "normal" | "low" | "very-low";
+export type PriorityItem = "very-high" | "high" | "normal" | "low" | "very-low" | "";
 
 export type SortingProps = "newer" | "older" | "nameAsc" | "nameDesc" | "default";
 

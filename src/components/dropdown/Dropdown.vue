@@ -68,7 +68,7 @@ export default defineComponent({
     },
     modelValue: {
       type: String as () => PriorityItem,
-      default: "very-high",
+      default: "",
     },
   },
   emits: ["update:modelValue"],
