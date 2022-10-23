@@ -93,7 +93,7 @@ export default defineComponent({
       if (selectedSorting.value === "nameDesc") {
         return store.getters.getTodoItems.sort(
           (first: ItemToDo, second: ItemToDo) =>
-            first.title.charCodeAt(0) - second.title.charCodeAt(0)
+            second.title.charCodeAt(0) - first.title.charCodeAt(0)
         );
       }
       if (selectedSorting.value === "unfinished") {
