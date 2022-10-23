@@ -78,28 +78,27 @@ export default defineComponent({
     const isLoading = ref<boolean>(false);
 
     const todoItems = computed<Array<ItemToDo>>(() => {
-      if (selectedSorting.value === "newer") {
-        return store.getters.getTodoItems;
-      }
-      if (selectedSorting.value === "older") {
-        return store.getters.getTodoItems.reverse();
-      }
-      if (selectedSorting.value === "nameAsc") {
-        return store.getters.getTodoItems.sort(
-          (first: ItemToDo, second: ItemToDo) =>
-            first.title.charCodeAt(0) - second.title.charCodeAt(0)
-        );
-      }
-      if (selectedSorting.value === "nameDesc") {
-        return store.getters.getTodoItems.sort(
-          (first: ItemToDo, second: ItemToDo) =>
-            second.title.charCodeAt(0) - first.title.charCodeAt(0)
-        );
-      }
-      if (selectedSorting.value === "unfinished") {
-        return store.getters.getTodoItems.sort(
-          (first: ItemToDo, second: ItemToDo) => first.is_active - second.is_active
-        );
+      switch (selectedSorting.value) {
+        case "newer":
+          return store.getters.getTodoItems;
+        case "older":
+          return store.getters.getTodoItems.reverse();
+        case "nameAsc":
+          return store.getters.getTodoItems.sort(
+            (first: ItemToDo, second: ItemToDo) =>
+              first.title.charCodeAt(0) - second.title.charCodeAt(0)
+          );
+        case "nameDesc":
+          return store.getters.getTodoItems.sort(
+            (first: ItemToDo, second: ItemToDo) =>
+              second.title.charCodeAt(0) - first.title.charCodeAt(0)
+          );
+        case "unfinished":
+          const a = store.getters.getTodoItems.sort(
+            (first: ItemToDo, second: ItemToDo) => second.is_active - first.is_active
+          );
+          console.log(a);
+          return a;
       }
     });
 
