@@ -4,15 +4,19 @@
       <input
         class="form-check-input appearance-none h-4 w-4 border border-inactive rounded-sm bg-white focus:ring-primary focus:bg-primary focus:border-primary focus:checked:bg-primary checked:bg-primary checked:border-primary focus:outline-none transition duration-200 cursor-pointer"
         type="checkbox"
-        value=""
+        :value="`checked-${item.id}`"
         data-cy="todo-item-checkbox"
+        @change="handleCheck"
+        :checked="item.is_active == 0 ? true : false"
       />
       <div
         class="h-3 w-3 rounded-full"
         :class="BindingClassPriority(item.priority)"
         data-cy="todo-item-priority-indicator"
       ></div>
-      <label data-cy="todo-item-title">{{ item.title }}</label>
+      <label :class="{ 'line-through': !item.is_active }" data-cy="todo-item-title">{{
+        item.title
+      }}</label>
       <Icon
         class="cursor-pointer p-1 text-inactive text-sm"
         @click="isModalForm = true"
@@ -90,6 +94,14 @@ export default defineComponent({
       handlerCloseForm();
     };
 
+    const handleCheck = async () => {
+      await store.dispatch(Actions.UPDATE_STATUS_TODO_ITEM, {
+        id: props.item.id,
+        is_active: props.item.is_active ? 0 : 1,
+      });
+      emit("fetch");
+    };
+
     return {
       BindingClassPriority,
       handlerDelete,
@@ -98,6 +110,7 @@ export default defineComponent({
       isModalForm,
       handlerCloseForm,
       handlerFetchModalForm,
+      handleCheck,
     };
   },
 });

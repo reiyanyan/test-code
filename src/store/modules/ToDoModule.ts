@@ -4,7 +4,7 @@ import ApiService from "@/core/services/ApiService";
 
 export type PriorityItem = "very-high" | "high" | "normal" | "low" | "very-low" | "";
 
-export type SortingProps = "newer" | "older" | "nameAsc" | "nameDesc" | "default";
+export type SortingProps = "newer" | "older" | "nameAsc" | "nameDesc" | "unfinished";
 
 export type ItemToDo = {
   id?: number;
@@ -68,6 +68,17 @@ export default class ToDoModule extends VuexModule {
         activity_group_id,
         title,
         priority,
+      })
+        .then(() => resolve())
+        .catch((err) => reject(err));
+    });
+  }
+
+  @Action
+  [Actions.UPDATE_STATUS_TODO_ITEM]({ id, is_active }: ItemToDo) {
+    return new Promise<void>((resolve, reject) => {
+      ApiService.patch(`/todo-items/${id}`, {
+        is_active,
       })
         .then(() => resolve())
         .catch((err) => reject(err));

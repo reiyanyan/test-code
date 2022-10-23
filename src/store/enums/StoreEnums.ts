@@ -8,6 +8,7 @@ enum Actions {
   DELETE_TODO_ITEM = "deleteToDoItem",
   ADD_TODO_ITEM = "addToDoItem",
   UPDATE_TODO_ITEM = "updateToDoItem",
+  UPDATE_STATUS_TODO_ITEM = "updateStatusToDoItem",
 }
 
 enum Mutations {

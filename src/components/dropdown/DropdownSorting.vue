@@ -37,11 +37,10 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, ref } from "vue";
 import Icon from "@/components/icon/Icon.vue";
 import { BindingClassPriority } from "@/core/helpers/index";
 import { SortingProps } from "@/store/modules/ToDoModule";
-import { propsToAttrMap } from "@vue/shared";
+import { computed, defineComponent, onMounted, ref } from "vue";
 
 type SortingDropdown = {
   icon: string;
@@ -86,7 +85,7 @@ export default defineComponent({
       },
       {
         icon: "filter_list",
-        mode: "default",
+        mode: "unfinished",
         cy: "unfinished",
       },
     ]);
@@ -105,7 +104,7 @@ export default defineComponent({
       if (level === "older") return "Terlama";
       if (level === "nameAsc") return "A-Z";
       if (level === "nameDesc") return "Z-A";
-      if (level === "default") return "Belum Selesai";
+      if (level === "unfinished") return "Belum Selesai";
     };
 
     onMounted(() => {

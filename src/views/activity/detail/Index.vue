@@ -74,12 +74,33 @@ export default defineComponent({
     const route = useRoute();
     const titleActivity = ref<string>("");
     const isModalForm = ref<boolean>(false);
-    const selectedSorting = ref<SortingProps>("default");
+    const selectedSorting = ref<SortingProps>("newer");
     const isLoading = ref<boolean>(false);
 
-    const todoItems = computed<Array<ItemToDo>>({
-      get: () => store.getters.getTodoItems,
-      set: (value) => value,
+    const todoItems = computed<Array<ItemToDo>>(() => {
+      if (selectedSorting.value === "newer") {
+        return store.getters.getTodoItems;
+      }
+      if (selectedSorting.value === "older") {
+        return store.getters.getTodoItems.reverse();
+      }
+      if (selectedSorting.value === "nameAsc") {
+        return store.getters.getTodoItems.sort((first: ItemToDo, second: ItemToDo) => {
+          if (first.title < second.title) return -1;
+          if (first.title > second.title) return 1;
+          return 0;
+        });
+      }
+      if (selectedSorting.value === "nameDesc") {
+        return store.getters.getTodoItems.sort((first: ItemToDo, second: ItemToDo) => {
+          if (first.title < second.title) return 1;
+          if (first.title > second.title) return -1;
+          return 0;
+        });
+      }
+      if (selectedSorting.value === "unfinished") {
+        return store.getters.getTodoItems.filter((val: ItemToDo) => val.is_active !== 1);
+      }
     });
 
     const handlerCloseForm = () => {
@@ -119,34 +140,36 @@ export default defineComponent({
       isModalForm.value = true;
     };
 
-    watch(
-      () => selectedSorting.value,
-      (val) => {
-        if (val === "newer") {
-          todoItems.value = store.getters.getTodoItems;
-        }
-        if (val === "older") {
-          todoItems.value = store.getters.getTodoItems.reverse();
-        }
-        if (val === "nameAsc") {
-          todoItems.value = store.getters.getTodoItems.sort((first: ItemToDo, second: ItemToDo) => {
-            if (first.title < second.title) return -1;
-            if (first.title > second.title) return 1;
-            return 0;
-          });
-        }
-        if (val === "nameDesc") {
-          todoItems.value = store.getters.getTodoItems.sort((first: ItemToDo, second: ItemToDo) => {
-            if (first.title < second.title) return 1;
-            if (first.title > second.title) return -1;
-            return 0;
-          });
-        }
-        if (val === "default") {
-          todoItems.value = store.getters.getTodoItems;
-        }
-      }
-    );
+    // watch(
+    //   () => selectedSorting.value,
+    //   (val) => {
+    //     if (val === "newer") {
+    //       todoItems.value = store.getters.getTodoItems;
+    //     }
+    //     if (val === "older") {
+    //       todoItems.value = store.getters.getTodoItems.reverse();
+    //     }
+    //     if (val === "nameAsc") {
+    //       todoItems.value = store.getters.getTodoItems.sort((first: ItemToDo, second: ItemToDo) => {
+    //         if (first.title < second.title) return -1;
+    //         if (first.title > second.title) return 1;
+    //         return 0;
+    //       });
+    //     }
+    //     if (val === "nameDesc") {
+    //       todoItems.value = store.getters.getTodoItems.sort((first: ItemToDo, second: ItemToDo) => {
+    //         if (first.title < second.title) return 1;
+    //         if (first.title > second.title) return -1;
+    //         return 0;
+    //       });
+    //     }
+    //     if (val === "unfinished") {
+    //       todoItems.value = store.getters.getTodoItems.filter(
+    //         (val: ItemToDo) => val.is_active !== 1
+    //       );
+    //     }
+    //   }
+    // );
 
     onMounted(() => {
       getInfoActivity();

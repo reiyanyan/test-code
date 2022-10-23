@@ -1,6 +1,6 @@
 import moment from "moment";
 import "moment/dist/locale/id";
-import { ItemToDo, PriorityItem } from "../../store/modules/ToDoModule";
+import { PriorityItem } from "../../store/modules/ToDoModule";
 
 export const formatTime = (time: Date) => {
   moment.updateLocale("id", {});
