@@ -1,6 +1,8 @@
 <template>
   <div class="flex flex-row gap-4 items-center" ref="wrapper">
-    <p v-if="!isEditable" class="text-3xl font-bold" data-cy="todo-title">{{ modelValue }}</p>
+    <p v-if="!isEditable" class="text-3xl font-bold" data-cy="todo-title" @click="toggleEditable">
+      {{ modelValue }}
+    </p>
     <Input
       v-else
       :value="modelValue"
