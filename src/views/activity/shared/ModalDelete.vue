@@ -1,5 +1,5 @@
 <template>
-  <Modal :outside-click="true" class="w-[490px]" @close="$emit('close')" data-cy="modal-delete">
+  <Modal :outside-click="true" class="w-[490px]" @close="$emit('close')">
     <div class="flex flex-col items-center text-center gap-8">
       <img
         src="@/assets/icons/outlined/modal-delete-icon.svg"

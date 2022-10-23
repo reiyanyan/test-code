@@ -16,6 +16,7 @@
         >delete</Icon
       >
     </div>
+    <div data-cy="modal-delete"></div>
 
     <ModalDelete
       :title="item.title"

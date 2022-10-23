@@ -26,6 +26,7 @@
       data-cy="todo-item-delete-button"
       >delete</Icon
     >
+    <div data-cy="modal-delete"></div>
 
     <ModalDelete
       :title="item.title"

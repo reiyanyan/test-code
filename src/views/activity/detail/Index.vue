@@ -38,7 +38,7 @@
         :key="index"
         :item="item"
         @fetch="getData"
-        data-cy="todo-item"
+        :data-cy="`todo-item-${index}`"
       />
     </div>
 
