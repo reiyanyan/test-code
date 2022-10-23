@@ -97,7 +97,9 @@ export default defineComponent({
         );
       }
       if (selectedSorting.value === "unfinished") {
-        return store.getters.getTodoItems.filter((val: ItemToDo) => val.is_active !== 0);
+        return store.getters.getTodoItems.sort(
+          (first: ItemToDo, second: ItemToDo) => first.is_active - second.is_active
+        );
       }
     });
 

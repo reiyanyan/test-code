@@ -71,6 +71,7 @@ export default defineComponent({
         title: itemName.value,
         priority: selectedLevel.value,
         id: props.item.id,
+        is_active: 1,
       };
       store
         .dispatch(state.value == "add" ? Actions.ADD_TODO_ITEM : Actions.UPDATE_TODO_ITEM, payload)
