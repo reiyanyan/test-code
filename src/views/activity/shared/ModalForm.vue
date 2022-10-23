@@ -15,7 +15,7 @@
         type="text"
         placeholder="Tambahkan nama list item"
       />
-      <Dropdown v-model="selectedLevel" title="Priority" data-cy="modal-add-priority-dropdown" />
+      <Dropdown v-model="selectedLevel" title="Priority" />
     </div>
 
     <template #footer>

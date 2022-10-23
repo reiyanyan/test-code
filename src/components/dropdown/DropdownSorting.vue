@@ -24,7 +24,7 @@
             <Icon>{{ item.icon }}</Icon>
             <p
               class="capitalize transition-color w-full cursor-pointer rounded-md px-5 py-2 duration-200 hover:bg-slate-400 hover:text-slate-600"
-              :data-cy="`sort-${item.cy}`"
+              :data-cy="`sort-selection-${item.cy}`"
             >
               {{ whichValue(item.mode) }}
             </p>

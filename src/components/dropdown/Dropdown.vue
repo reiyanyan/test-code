@@ -1,5 +1,9 @@
 <template>
-  <div class="relative flex w-full flex-col gap-2" ref="wrapper">
+  <div
+    class="relative flex w-full flex-col gap-2"
+    ref="wrapper"
+    data-cy="modal-add-priority-dropdown"
+  >
     <p class="pl-3" data-cy="modal-add-priority-title">{{ title }}</p>
     <button
       class="flex w-full flex-row justify-between rounded-lg px-5 py-4 text-white"
