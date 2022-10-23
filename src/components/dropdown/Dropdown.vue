@@ -11,7 +11,7 @@
         'border-none ring-2 ring-blue-600 text-slate-900 bg-gray-200': isActive,
         'text-slate-900 border border-gray-500': !isActive,
       }"
-      data-cy="modal-add-priority-item"
+      :data-cy="`modal-add-priority-item${isActive ? 'a' : ''}`"
       @click="isActive = !isActive"
     >
       <div class="flex flex-row gap-2 items-center">
@@ -30,7 +30,10 @@
       @focusout="isActive = false"
     >
       <div class="w-full text-black">
-        <div class="flex w-full flex-col gap-y-2 px-5">
+        <div
+          class="flex w-full flex-col gap-y-2 px-5"
+          :data-cy="`modal-add-priority-item${isActive ? '' : 'a'}`"
+        >
           <div
             v-for="item in options"
             :key="item"

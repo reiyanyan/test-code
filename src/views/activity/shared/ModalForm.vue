@@ -20,7 +20,10 @@
 
     <template #footer>
       <div class="flex justify-end">
-        <Button :disabled="itemName === ''" @click="handlerSubmit" data-cy="modal-add-save-button"
+        <Button
+          :disabled="itemName === '' ? 'disabled' : false"
+          @click="handlerSubmit"
+          data-cy="modal-add-save-button"
           >Simpan</Button
         >
       </div>
