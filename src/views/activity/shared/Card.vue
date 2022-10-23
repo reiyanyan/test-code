@@ -11,8 +11,8 @@
       <p class="text-xs" data-cy="activity-item-date">{{ formatTime(item.created_at) }}</p>
       <Icon
         class="cursor-pointer p-1"
-        data-cy="activity-delete-item-button"
         @click="isModalDelete = true"
+        data-cy="activity-item-delete-button"
         >delete</Icon
       >
     </div>
